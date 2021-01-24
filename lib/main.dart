@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:prologue/conversations/screen.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:prologue/splash/screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,11 +11,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Prologue',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+      theme: ThemeData.dark().copyWith(
+        primaryColor: Colors.greenAccent,
+        textTheme: GoogleFonts.poppinsTextTheme().apply(
+          bodyColor: Colors.greenAccent,
+        ),
       ),
-      home: ConversationsScreen(),
+      home: SplashScreen(),
     );
   }
 }
