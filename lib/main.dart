@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prologue/conversations/converstions.dart';
+import 'package:prologue/conversations/screen.dart';
 
 void main() {
   runApp(MyApp());
