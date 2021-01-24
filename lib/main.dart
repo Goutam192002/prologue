@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:prologue/contacts/bloc/bloc.dart';
-import 'package:prologue/contacts/bloc/events.dart';
-import 'package:prologue/contacts/sync.dart';
+import 'package:prologue/conversations/converstions.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,10 +14,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: BlocProvider<ContactsBloc>(
-        create: (context) => ContactsBloc()..add(StartSync()),
-        child: SyncContacts(),
-      ),
+      home: ConversationsScreen(),
     );
   }
 }
