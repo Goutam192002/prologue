@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:prologue/contacts/sync_screen.dart';
+import 'package:prologue/conversations/screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -12,12 +12,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Prologue',
       theme: ThemeData.dark().copyWith(
-        primaryColor: Colors.greenAccent,
         textTheme: GoogleFonts.poppinsTextTheme().apply(
           bodyColor: Colors.greenAccent,
         ),
       ),
-      home: SyncContactsScreen(),
+      home: ConversationsScreen(),
     );
   }
 }
