@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:prologue/conversations/screen.dart';
+import 'package:prologue/chat/screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
           bodyColor: Colors.greenAccent,
         ),
       ),
-      home: ConversationsScreen(),
+      home: ChatScreen(),
     );
   }
 }
