@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:prologue/chat/screen.dart';
+import 'package:prologue/auth/bloc/bloc.dart';
+import 'package:prologue/auth/screens/auth_screen.dart';
+
+import 'auth/bloc/events.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,7 +20,10 @@ class MyApp extends StatelessWidget {
           bodyColor: Colors.greenAccent,
         ),
       ),
-      home: ChatScreen(),
+      home: BlocProvider<AuthBloc>(
+        create: (context) => AuthBloc()..add(InitAuth()),
+        child: AuthScreen(),
+      ),
     );
   }
 }
