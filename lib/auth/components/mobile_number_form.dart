@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prologue/core/components/full_width_button.dart';
 
-class MobileNumberForm extends StatelessWidget {
+class MobileNumberForm extends StatefulWidget {
   MobileNumberForm({
     Key key,
     @required this.countryCode,
@@ -10,6 +10,27 @@ class MobileNumberForm extends StatelessWidget {
 
   final String countryCode;
   final String mobileNumber;
+
+  @override
+  _MobileNumberFormState createState() => _MobileNumberFormState();
+}
+
+class _MobileNumberFormState extends State<MobileNumberForm> {
+  final formKey = GlobalKey<FormState>();
+  TextEditingController mobileNumberController;
+  bool valid = false;
+
+  @override
+  void initState() {
+    super.initState();
+    mobileNumberController = TextEditingController(text: widget.mobileNumber);
+    mobileNumberController.addListener(() {
+      setState(() {
+        valid = mobileNumberController.text.length == 10;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +56,7 @@ class MobileNumberForm extends StatelessWidget {
         SizedBox(height: 36),
         Row(
           children: [
-            Text(countryCode),
+            Text(widget.countryCode),
             SizedBox(width: 16),
             Expanded(
               child: TextFormField(
@@ -47,13 +68,14 @@ class MobileNumberForm extends StatelessWidget {
                   counterText: '',
                 ),
                 keyboardType: TextInputType.number,
+                controller: mobileNumberController,
               ),
             ),
           ],
         ),
         Expanded(child: Container()),
         FullWidthButton(
-          onTap: () {},
+          onTap: valid ? () {} : null,
           buttonText: "NEXT",
         ),
       ],

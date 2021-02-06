@@ -15,8 +15,10 @@ class AuthScreen extends StatelessWidget {
           child: BlocBuilder<AuthBloc, AuthState>(
             builder: (BuildContext context, AuthState state) {
               return MobileNumberForm(
-                  countryCode: state.countryCode,
-                  mobileNumber: state.mobileNumber);
+                key: UniqueKey(),
+                countryCode: state.countryCode,
+                mobileNumber: state.mobileNumber,
+              );
             },
           ),
         ),
