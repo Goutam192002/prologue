@@ -1,8 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:prologue/auth/bloc/bloc.dart';
+import 'package:prologue/auth/bloc/events.dart';
 import 'package:prologue/core/components/full_width_button.dart';
 
-class VerifyNumberScreen extends StatelessWidget {
+class VerifyNumberScreen extends StatefulWidget {
+  VerifyNumberScreen({
+    @required this.mobileNumber,
+    this.error = '',
+    this.loading = false,
+  });
+
+  final String mobileNumber;
+  final String error;
+  final bool loading;
+
+  @override
+  _VerifyNumberScreenState createState() => _VerifyNumberScreenState();
+}
+
+class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
+  String code = '';
+  bool disabled = true;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -28,7 +49,12 @@ class VerifyNumberScreen extends StatelessWidget {
         PinCodeTextField(
           appContext: context,
           length: 4,
-          onChanged: (value) {},
+          onChanged: (String value) {
+            setState(() {
+              disabled = value.length != 4;
+              code = value;
+            });
+          },
           backgroundColor: Colors.transparent,
           keyboardType: TextInputType.number,
           enablePinAutofill: true,
@@ -42,18 +68,29 @@ class VerifyNumberScreen extends StatelessWidget {
           ),
           textStyle: TextStyle(color: Colors.white),
         ),
-        Center(
-          child: FlatButton(
-            child: Text("Resend OTP"),
-            onPressed: () {},
-          ),
+        Text(
+          widget.error ?? '',
+          style: TextStyle(color: Colors.red),
         ),
+        // Center(
+        //   child: FlatButton(
+        //     child: Text("Resend OTP"),
+        //     onPressed: () {},
+        //   ),
+        // ),
         Expanded(child: Container()),
         FullWidthButton(
-          disabled: true,
-          loading: false,
+          disabled: disabled,
+          loading: widget.loading,
           buttonText: 'VERIFY',
-          onTap: () {},
+          onTap: () {
+            BlocProvider.of<AuthBloc>(context).add(
+              VerifyMobileNumber(
+                mobileNumber: widget.mobileNumber,
+                code: code,
+              ),
+            );
+          },
         ),
       ],
     );

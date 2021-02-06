@@ -16,13 +16,18 @@ class AuthModule extends StatelessWidget {
           child: BlocBuilder<AuthBloc, AuthState>(
             builder: (BuildContext context, AuthState state) {
               if (state is WaitingForVerification) {
-                return VerifyNumberScreen();
+                return VerifyNumberScreen(
+                  mobileNumber: state.mobileNumber,
+                  error: state.error,
+                  loading: state.authStatus == AuthStatus.LOADING,
+                );
               }
-              String countryCode = state.mobileNumber.length > 0
+              bool isValidMobileNumber = state.mobileNumber.length > 0;
+              String countryCode = isValidMobileNumber
                   ? state.mobileNumber
                       .substring(0, state.mobileNumber.length - 10)
                   : '+91';
-              String mobileNumber = state.mobileNumber.length > 0
+              String mobileNumber = isValidMobileNumber
                   ? state.mobileNumber.substring(state.mobileNumber.length - 10)
                   : '';
               return MobileNumberScreen(
