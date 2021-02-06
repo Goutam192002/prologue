@@ -4,8 +4,8 @@ import 'package:prologue/auth/bloc/bloc.dart';
 import 'package:prologue/auth/bloc/events.dart';
 import 'package:prologue/core/components/full_width_button.dart';
 
-class MobileNumberForm extends StatefulWidget {
-  MobileNumberForm({
+class MobileNumberScreen extends StatefulWidget {
+  MobileNumberScreen({
     Key key,
     @required this.countryCode,
     @required this.mobileNumber,
@@ -16,10 +16,10 @@ class MobileNumberForm extends StatefulWidget {
   final String mobileNumber;
   final bool loading;
   @override
-  _MobileNumberFormState createState() => _MobileNumberFormState();
+  _MobileNumberScreenState createState() => _MobileNumberScreenState();
 }
 
-class _MobileNumberFormState extends State<MobileNumberForm> {
+class _MobileNumberScreenState extends State<MobileNumberScreen> {
   final formKey = GlobalKey<FormState>();
   TextEditingController mobileNumberController;
   bool disabled = true;
@@ -82,7 +82,9 @@ class _MobileNumberFormState extends State<MobileNumberForm> {
           loading: widget.loading,
           onTap: () {
             BlocProvider.of<AuthBloc>(context).add(
-              Authenticate(mobileNumberController.text),
+              Authenticate(
+                '${widget.countryCode}${mobileNumberController.text}',
+              ),
             );
           },
           buttonText: "NEXT",
