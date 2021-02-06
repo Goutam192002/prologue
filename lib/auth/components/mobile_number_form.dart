@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:prologue/auth/bloc/bloc.dart';
+import 'package:prologue/auth/bloc/events.dart';
 import 'package:prologue/core/components/full_width_button.dart';
 
 class MobileNumberForm extends StatefulWidget {
@@ -6,11 +9,12 @@ class MobileNumberForm extends StatefulWidget {
     Key key,
     @required this.countryCode,
     @required this.mobileNumber,
+    this.loading = false,
   }) : super(key: key);
 
   final String countryCode;
   final String mobileNumber;
-
+  final bool loading;
   @override
   _MobileNumberFormState createState() => _MobileNumberFormState();
 }
@@ -18,7 +22,7 @@ class MobileNumberForm extends StatefulWidget {
 class _MobileNumberFormState extends State<MobileNumberForm> {
   final formKey = GlobalKey<FormState>();
   TextEditingController mobileNumberController;
-  bool valid = false;
+  bool disabled = true;
 
   @override
   void initState() {
@@ -26,10 +30,9 @@ class _MobileNumberFormState extends State<MobileNumberForm> {
     mobileNumberController = TextEditingController(text: widget.mobileNumber);
     mobileNumberController.addListener(() {
       setState(() {
-        valid = mobileNumberController.text.length == 10;
+        disabled = mobileNumberController.text.length != 10;
       });
     });
-    super.initState();
   }
 
   @override
@@ -75,7 +78,13 @@ class _MobileNumberFormState extends State<MobileNumberForm> {
         ),
         Expanded(child: Container()),
         FullWidthButton(
-          onTap: valid ? () {} : null,
+          disabled: disabled,
+          loading: widget.loading,
+          onTap: () {
+            BlocProvider.of<AuthBloc>(context).add(
+              Authenticate(mobileNumberController.text),
+            );
+          },
           buttonText: "NEXT",
         ),
       ],

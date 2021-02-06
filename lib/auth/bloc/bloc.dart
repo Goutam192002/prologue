@@ -12,7 +12,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       String result = await SmsAutoFill().hint;
       String countryCode = result.substring(0, result.length - 10);
       String mobileNumber = result.substring(result.length - 10);
-      yield UnAuthenticated(countryCode, mobileNumber);
+      yield UnAuthenticated(countryCode, mobileNumber, AuthStatus.DONE);
+    } else if (event is Authenticate) {
+      yield state.copyWith(authStatus: AuthStatus.LOADING);
     } else {
       throw UnimplementedError();
     }

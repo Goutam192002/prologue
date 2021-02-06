@@ -18,6 +18,7 @@ class AuthScreen extends StatelessWidget {
                 key: UniqueKey(),
                 countryCode: state.countryCode,
                 mobileNumber: state.mobileNumber,
+                loading: state.authStatus == AuthStatus.LOADING,
               );
             },
           ),

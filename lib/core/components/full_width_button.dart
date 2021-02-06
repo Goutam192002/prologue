@@ -3,9 +3,16 @@ import 'package:flutter/material.dart';
 class FullWidthButton extends StatelessWidget {
   final String buttonText;
   final Function onTap;
+  final bool loading;
+  final bool disabled;
 
-  const FullWidthButton({Key key, this.buttonText, this.onTap})
-      : super(key: key);
+  const FullWidthButton({
+    Key key,
+    this.buttonText,
+    this.onTap,
+    this.loading,
+    this.disabled,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,15 +24,19 @@ class FullWidthButton extends StatelessWidget {
       ),
       buttonColor: Colors.greenAccent,
       child: RaisedButton(
-        onPressed: this.onTap,
-        child: Text(
-          this.buttonText,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        onPressed: this.disabled || this.loading ? null : this.onTap,
+        child: this.loading
+            ? CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.black45),
+              )
+            : Text(
+                this.buttonText,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
       ),
     );
   }
