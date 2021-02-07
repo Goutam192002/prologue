@@ -14,5 +14,6 @@ class AuthRepository {
       '$BASE_API_URL/auth/verify/',
       data: {"mobile_number": mobileNumber, "code": code},
     );
+    return response;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:accountmanager/accountmanager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prologue/auth/bloc/events.dart';
 import 'package:prologue/auth/bloc/states.dart';
@@ -12,11 +13,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   @override
   Stream<AuthState> mapEventToState(AuthEvent event) async* {
     if (event is InitAuth) {
-      String result = await SmsAutoFill().hint;
-      yield UnAuthenticated(result, AuthStatus.DONE);
+      List<Account> accounts = await AccountManager.getAccounts();
+      if (accounts.length > 0) {
+        AccessToken accessToken =
+            await AccountManager.getAccessToken(accounts[0], 'jwt');
+        yield Authenticated();
+      } else {
+        String result = await SmsAutoFill().hint;
+        yield UnAuthenticated(result, AuthStatus.DONE);
+      }
     } else if (event is Authenticate) {
       yield state.copyWith(authStatus: AuthStatus.LOADING);
-      await _authRepository.authenticate(event.mobileNumber);
+      var response = await _authRepository.authenticate(event.mobileNumber);
       yield WaitingForVerification(
         state.mobileNumber,
         AuthStatus.DONE,
@@ -26,8 +34,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       try {
         var response =
             await _authRepository.verifyCode(event.mobileNumber, event.code);
+        await AccountManager.addAccount(
+          Account('Prologue', 'com.prologue.prologue'),
+        );
+        await AccountManager.setAccessToken(
+          Account('Prologue', 'com.prologue.prologue'),
+          AccessToken('jwt', response.data["access_token"]),
+        );
         yield Authenticated();
       } catch (e) {
+        print(e);
         yield state.copyWith(
           authStatus: AuthStatus.ERROR,
           error: 'Something went wrong please try again later',
