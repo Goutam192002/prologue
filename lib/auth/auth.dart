@@ -22,18 +22,8 @@ class AuthModule extends StatelessWidget {
                   loading: state.authStatus == AuthStatus.LOADING,
                 );
               }
-              bool isValidMobileNumber = state.mobileNumber.length > 0;
-              String countryCode = isValidMobileNumber
-                  ? state.mobileNumber
-                      .substring(0, state.mobileNumber.length - 10)
-                  : '+91';
-              String mobileNumber = isValidMobileNumber
-                  ? state.mobileNumber.substring(state.mobileNumber.length - 10)
-                  : '';
               return MobileNumberScreen(
                 key: UniqueKey(),
-                countryCode: countryCode,
-                mobileNumber: mobileNumber,
                 loading: state.authStatus == AuthStatus.LOADING,
               );
             },

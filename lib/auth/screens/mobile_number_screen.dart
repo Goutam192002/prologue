@@ -3,17 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prologue/auth/bloc/bloc.dart';
 import 'package:prologue/auth/bloc/events.dart';
 import 'package:prologue/core/components/full_width_button.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 class MobileNumberScreen extends StatefulWidget {
   MobileNumberScreen({
     Key key,
-    @required this.countryCode,
-    @required this.mobileNumber,
     this.loading = false,
   }) : super(key: key);
 
-  final String countryCode;
-  final String mobileNumber;
   final bool loading;
   @override
   _MobileNumberScreenState createState() => _MobileNumberScreenState();
@@ -23,16 +20,26 @@ class _MobileNumberScreenState extends State<MobileNumberScreen> {
   final formKey = GlobalKey<FormState>();
   TextEditingController mobileNumberController;
   bool disabled = true;
+  String countryCode = '+91';
 
   @override
   void initState() {
     super.initState();
-    mobileNumberController = TextEditingController(text: widget.mobileNumber);
+    mobileNumberController = TextEditingController(text: '');
     mobileNumberController.addListener(() {
       setState(() {
         disabled = mobileNumberController.text.length != 10;
       });
     });
+    autoFillMobileNumber();
+  }
+
+  void autoFillMobileNumber() async {
+    String result = await SmsAutoFill().hint;
+    setState(() {
+      countryCode = result.substring(0, result.length - 10);
+    });
+    mobileNumberController.text = result.substring(result.length - 10);
   }
 
   @override
@@ -59,7 +66,7 @@ class _MobileNumberScreenState extends State<MobileNumberScreen> {
         SizedBox(height: 36),
         Row(
           children: [
-            Text(widget.countryCode),
+            Text(countryCode),
             SizedBox(width: 16),
             Expanded(
               child: TextFormField(
@@ -83,7 +90,7 @@ class _MobileNumberScreenState extends State<MobileNumberScreen> {
           onTap: () {
             BlocProvider.of<AuthBloc>(context).add(
               Authenticate(
-                '${widget.countryCode}${mobileNumberController.text}',
+                '$countryCode${mobileNumberController.text}',
               ),
             );
           },

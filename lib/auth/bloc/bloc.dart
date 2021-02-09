@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prologue/auth/bloc/events.dart';
 import 'package:prologue/auth/bloc/states.dart';
 import 'package:prologue/core/repositories/auth.dart';
-import 'package:sms_autofill/sms_autofill.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthRepository _authRepository = AuthRepository();
@@ -19,8 +18,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             await AccountManager.getAccessToken(accounts[0], 'jwt');
         yield Authenticated();
       } else {
-        String result = await SmsAutoFill().hint;
-        yield UnAuthenticated(result, AuthStatus.DONE);
+        yield UnAuthenticated('', AuthStatus.DONE);
       }
     } else if (event is Authenticate) {
       yield state.copyWith(authStatus: AuthStatus.LOADING);
